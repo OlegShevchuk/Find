@@ -7,32 +7,30 @@ import java.io.File;
  */
 public class FindThread implements Runnable
 {
-    File dir;
-    String key;
+    Find find;
 
-    public FindThread(File dir, String key)
+    public FindThread(Find find)
     {
-        this.dir = dir;
-        this.key = key;
+        this.find = find;
     }
 
     @Override
     public void run()
     {
 
-        if (dir==null) return ;
+        if (find.getDir()==null) return ;
 
-        File[]  fin=dir.listFiles();
+        File[]  fin=find.getDir().listFiles();
         if (fin!=null)
         {
             for (int i = 0; i < fin.length; i++)
             {
                 if (fin[i].isDirectory()){
-                    FindThread path=new FindThread(fin[i],key);
+                    FindThread path=new FindThread(new Find(fin[i],find));
                     Thread temp=new Thread(path);
                     temp.start();
                 }
-                if (fin[i].getName().toLowerCase().contains(key.toLowerCase())) Find.writerResult(fin[i].getAbsolutePath());
+                if (fin[i].getName().toLowerCase().contains(find.getKey().toLowerCase())) find.writerResult(fin[i].getAbsolutePath());
 
             }
         }

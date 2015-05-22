@@ -10,23 +10,35 @@ import java.io.IOException;
  */
 public class Find
 {
-    private static String fileName="D:\\RUSH\\Project\\JavaRushHomeWork\\src\\ua\\artcode\\ds\\Week4\\Find\\result.txt";
+    private String fileName;
+    private File dir;
+    private String key;
 
+    public Find(String dir, String key){
+        this(dir, key, "D:\\RUSH\\Project\\JavaRushHomeWork\\src\\ua\\artcode\\ds\\Week4\\Find\\result.txt");
 
-    public Find(String dir, String key)
-    {
-        try(BufferedWriter bufferedWriter=new BufferedWriter(new FileWriter(fileName))){
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        new Thread(new FindThread(new File(dir),key)).start();
+    }
+    public Find(File dir,Find find){
+        this.dir=dir;
+        this.fileName=find.getFileName();
+        this.key=find.getKey();
 
     }
 
-    public synchronized static void writerResult(String str){
+    public Find(String dir, String key, String fileName)
+    {
+        this.fileName=fileName;
+        this.dir=new File(dir);
+        this.key=key;
+        findStart();
+
+    }
+    public void findStart(){
+
+        new Thread(new FindThread(this)).start();
+    }
+
+    public synchronized void writerResult(String str){
 
         try(BufferedWriter bufferedWriter=new BufferedWriter(new FileWriter(fileName,true))){
 
@@ -36,5 +48,35 @@ public class Find
         {
             e.printStackTrace();
         }
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public void setFileName(String fileName)
+    {
+        this.fileName = fileName;
+    }
+
+    public File getDir()
+    {
+        return dir;
+    }
+
+    public void setDir(File dir)
+    {
+        this.dir = dir;
+    }
+
+    public String getKey()
+    {
+        return key;
+    }
+
+    public void setKey(String key)
+    {
+        this.key = key;
     }
 }
